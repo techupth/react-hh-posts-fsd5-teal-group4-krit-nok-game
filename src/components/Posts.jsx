@@ -1,28 +1,58 @@
+import { useState } from "react";
+import userpost from "./Userpost";
+
 function Posts() {
+  const [like, setLike] = useState(userpost);
+
+  const likePost = (postIndex) => {
+    const newLike = [...like];
+    newLike[postIndex].likes = newLike[postIndex].likes + 1;
+    setLike(newLike);
+  }
+
+  const dislikePost = (postIndex) => {
+    const newLike = [...like];
+    if(newLike[postIndex].likes > 0) {
+      newLike[postIndex].likes = newLike[postIndex].likes - 1;
+      setLike(newLike)
+    }
+  }
+
   return (
     <div class="app-wrapper">
       <h1 class="app-title">Posts</h1>
       <div class="post-list">
-        <div class="post-item">
-          <div class="post-header">
-            <h2>Post Title #1</h2>
-            <div class="post-social-media-stats">
-              <span class="stats-topic">Likes: </span>
-              <span class="post-likes">10</span>
-            </div>
-          </div>
-          <p class="post-content">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus
-            vel turpis vestibulum, aliquet ipsum vitae, auctor risus. Morbi
-            tincidunt, leo non molestie consectetur, elit libero faucibus
-            tellus, sed fringilla tortor libero sit amet odio. Maecenas sed ante
-            condimentum mauris euismod pellentesque eu eu justo...
-          </p>
-          <div class="post-actions">
-            <button class="like-button">Like</button>
-            <button class="dislike-button">Dislike</button>
-          </div>
-        </div>
+        {
+          like.map((item, index) => {
+            return (
+              <div class="post-item">
+                <div class="post-header">
+                  <h2>{item.title}</h2>
+                  <div class="post-social-media-stats">
+                    <span class="stats-topic">Likes: </span>
+                    <span class="post-likes">{item.likes}</span>
+                  </div>
+                </div>
+                <p class="post-content">{item.content}</p>
+                <div class="post-actions">
+                  <button 
+                    class="like-button" 
+                    onClick={() => {
+                      likePost(index);
+                    }}
+                  >Like</button>
+                  <button 
+                    class="dislike-button"
+                    onClick={() => {
+                      dislikePost(index);
+                    }}
+                  >
+                  Dislike</button>
+                </div>
+              </div>
+            )
+          })
+        }
       </div>
     </div>
   );
